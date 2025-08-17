@@ -293,5 +293,5 @@ coroutine.wrap(function()
 end)()
 
 
-wait(5)
+wait(3)
 tweenOutAndDestroy()
