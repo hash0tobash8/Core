@@ -192,11 +192,13 @@ function Library:new()
     end
 
     
-    local ContainerCorner = Instance.new("UICorner")
+    
+
+  local ContainerCorner = Instance.new("UICorner")
     ContainerCorner.CornerRadius = UDim.new(0, 20)
     ContainerCorner.Parent = container.Container
 
-  local Top = Instance.new("ImageLabel")
+    local Top = Instance.new("ImageLabel")
     Top.Name = "Top"
     Top.Parent = Container
     Top.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -218,7 +220,7 @@ function Library:new()
     Logo.Size = UDim2.new(0, 25, 0, 25)
     Logo.Image = "rbxassetid://133495621202705"
     
-local positionX = 0.0938254446
+    local positionX = 0.0938254446
     local TextLabel = Instance.new("TextLabel")
     TextLabel.Parent = Top
     TextLabel.AnchorPoint = Vector2.new(0, 0.5) 
