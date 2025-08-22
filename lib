@@ -203,41 +203,39 @@ function Library:new()
     Top.BackgroundTransparency = 1.000
     Top.BorderColor3 = Color3.fromRGB(0, 0, 0)
     Top.BorderSizePixel = 0
-   Top.Size = UDim2.new(1, 0, 0.12, 0)
+   Top.Size = UDim2.new(1, 0, 0.08, 0) 
     Top.Image = ""
 
-    --// This is the new code
-local Logo = Instance.new("ImageLabel")
-Logo.Name = "Logo"
-Logo.Parent = Top
-Logo.AnchorPoint = Vector2.new(0, 0.5) 
-Logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Logo.BackgroundTransparency = 1.000
-Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Logo.BorderSizePixel = 0
-Logo.Position = UDim2.new(0, 15, 0.5, 0) 
-Logo.Size = UDim2.new(0, 36, 0, 36) 
-Logo.Image = "rbxassetid://133495621202705" 
+    local Logo = Instance.new("ImageLabel")
+    Logo.Name = "Logo"
+    Logo.Parent = Top
+    Logo.AnchorPoint = Vector2.new(0.5, 0.5)
+    Logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Logo.BackgroundTransparency = 1.000
+    Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Logo.BorderSizePixel = 0
+    Logo.Position = UDim2.new(0.0387367606, 0, 0.5, 0)
+    Logo.Size = UDim2.new(0, 30, 0, 30)
+    Logo.Image = ""
     
+    local positionX = 0.0938254446
 
-local TextLabel = Instance.new("TextLabel")
-TextLabel.Parent = Top
-TextLabel.AnchorPoint = Vector2.new(0, 0.5)
-TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.BackgroundTransparency = 1.000
-TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel.BorderSizePixel = 0
-
-TextLabel.Position = UDim2.new(0, 15 + 36 + 10, 0.5, 0) 
-
-TextLabel.Size = UDim2.new(1, -(15 + 36 + 10 + 15), 1, 0) 
-TextLabel.FontFace = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.SemiBold)
-TextLabel.Text = getgenv().namehub or "Moon" 
-TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.TextScaled = true -- Set to true for better scaling
-TextLabel.TextSize = 14.000
-TextLabel.TextWrapped = true
-TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+    local TextLabel = Instance.new("TextLabel")
+    TextLabel.Parent = Top
+    TextLabel.AnchorPoint = Vector2.new(0, 0.5) 
+    TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TextLabel.BackgroundTransparency = 1.000
+    TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    TextLabel.BorderSizePixel = 0
+    TextLabel.Position = UDim2.new(0.0338254446, 0, 0.7, 0)
+    TextLabel.Size = UDim2.new(1 - positionX, 0, 0, 16) 
+    TextLabel.FontFace = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.SemiBold)
+    TextLabel.Text = getgenv().namehub or "getgenv().namehub"
+    TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextLabel.TextScaled = false
+    TextLabel.TextSize = 14.000
+    TextLabel.TextWrapped = true
+    TextLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 
     local Line = Instance.new("Frame")
@@ -246,8 +244,8 @@ TextLabel.TextXAlignment = Enum.TextXAlignment.Left
     Line.BackgroundColor3 = Color3.fromRGB(27, 28, 33)
     Line.BorderColor3 = Color3.fromRGB(0, 0, 0)
     Line.BorderSizePixel = 0
-    Line.Position = UDim2.new(0.296, 0, 0.12, 0)
-    Line.Size = UDim2.new(0, 2, 0.88, 0)
+    Line.Position = UDim2.new(0.296137333, 0, 0.0915492922, 0)
+    Line.Size = UDim2.new(0, 2, 0, 387)
 
     local tabs = Instance.new("ScrollingFrame")
     tabs.Name = "Tabs"
@@ -256,7 +254,7 @@ TextLabel.TextXAlignment = Enum.TextXAlignment.Left
     tabs.BackgroundTransparency = 1.000
     tabs.BorderColor3 = Color3.fromRGB(0, 0, 0)
     tabs.BorderSizePixel = 0
-    tabs.Position = UDim2.new(0, 10, 0.12, 0)
+    tabs.Position = UDim2.new(0, 10, 0.0915492922, 0)
     local layout = Instance.new("UIListLayout")
     layout.Padding = UDim.new(0, 6)
     layout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -268,7 +266,7 @@ TextLabel.TextXAlignment = Enum.TextXAlignment.Left
         tabs.CanvasSize = UDim2.new(0, 0, 0, math.max(contentHeight + 10, minHeight))
     end)
 
-    tabs.Size = UDim2.new(0.284, -10, 0.88, 0)
+    tabs.Size = UDim2.new(0.284, -10, 0.91, 0)
     tabs.ScrollBarImageColor3 = Color3.fromRGB(0, 0, 0)
     tabs.ScrollBarThickness = 0
     tabs.Parent = container.Container
