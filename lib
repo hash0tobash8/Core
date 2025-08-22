@@ -218,7 +218,7 @@ function Library:new()
     Logo.Size = UDim2.new(0, 25, 0, 25)
     Logo.Image = "rbxassetid://133495621202705"
     
-    local positionX = 0.0938254446
+local positionX = 0.0938254446
     local TextLabel = Instance.new("TextLabel")
     TextLabel.Parent = Top
     TextLabel.AnchorPoint = Vector2.new(0, 0.5) 
@@ -235,6 +235,7 @@ function Library:new()
     TextLabel.TextSize = 14.000
     TextLabel.TextWrapped = true
     TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+
 
 
 
