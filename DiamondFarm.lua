@@ -18,8 +18,8 @@ local qtp = queueonteleport or queue_on_teleport
 if qtp then
     qtp([[
         repeat task.wait() until game:IsLoaded()
-        local flag = pcall(function() return readfile("ATS.txt") end)
-        if flag and flag == "on" then
+        local ok, flag = pcall(function() return readfile("ATS.txt") end)
+        if ok and flag == "on" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/hash0tobash8/Core/refs/heads/main/DiamondFarm.lua'))()
         end
     ]])
