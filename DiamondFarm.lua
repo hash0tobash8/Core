@@ -11,8 +11,6 @@ local DISCORD_LINK = "http://discord.gg/moondiety"
 local BLACKLISTED_PLACEIDS = {
     [7954620862] = true,
 }
-
--- Auto-reload setup (placed early to queue before any hops)
 pcall(function()
     writefile("ATS.txt", "on")
 end)
@@ -20,8 +18,8 @@ local qtp = queueonteleport or queue_on_teleport
 if qtp then
     qtp([[
         repeat task.wait() until game:IsLoaded()
-        local ok, flag = pcall(function() return readfile("ATS.txt") end)
-        if ok and flag == "on" then
+        local flag = pcall(function() return readfile("ATS.txt") end)
+        if flag and flag == "on" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/hash0tobash8/Core/refs/heads/main/DiamondFarm.lua'))()
         end
     ]])
@@ -37,13 +35,13 @@ local function notify(title, text, dur)
 end
 
 local function safeTeleportToInstance(placeId, serverId, waitTimeout)
+    waitTimeout = waitTimeout or 10
     if BLACKLISTED_PLACEIDS[placeId] then return false end
     local curJob = game.JobId
     local ok = pcall(function()
         TeleportService:TeleportToPlaceInstance(placeId, serverId, LocalPlayer)
     end)
     if not ok then return false end
-    waitTimeout = waitTimeout or 10
     local t0 = tick()
     while tick() - t0 < waitTimeout do
         if game.JobId ~= curJob then
@@ -60,7 +58,7 @@ local function hopServer()
     isHopping = true
     task.spawn(function()
         local startT = tick()
-        local gameId = game.PlaceId
+        local gameId = tonumber(game.PlaceId)
         local tried = {}
         while tick() - startT < 28 do
             if BLACKLISTED_PLACEIDS[gameId] then
@@ -70,7 +68,7 @@ local function hopServer()
                 return game:HttpGet(("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100"):format(gameId))
             end)
             if success and body then
-                local ok, data = pcall(HttpService.JSONDecode, HttpService, body)
+                local ok, data = pcall(function() return HttpService:JSONDecode(body) end)
                 if ok and data and data.data then
                     for _, server in ipairs(data.data) do
                         if server.id and server.id ~= game.JobId and server.playing < server.maxPlayers and not tried[server.id] then
@@ -88,13 +86,13 @@ local function hopServer()
             task.wait(0.6)
         end
         isHopping = false
-        notify("Hop Failed", "No suitable servers found after timeout. Retry manually if needed.", 5)
     end)
 end
 
 if BLACKLISTED_PLACEIDS[game.PlaceId] then
     notify("Blacklisted Server", "Hopping from blacklisted server...", 2)
-    task.delay(0.5, hopServer)
+    task.wait(0.5)
+    hopServer()
 end
 
 task.spawn(function()
@@ -124,7 +122,7 @@ local function rainbowStroke(stroke)
     task.spawn(function()
         while stroke and stroke.Parent do
             for hue = 0, 1, 0.01 do
-                if not (stroke and stroke.Parent) then break end
+                if not stroke.Parent then break end
                 stroke.Color = Color3.fromHSV(hue, 1, 1)
                 task.wait(0.02)
             end
@@ -137,7 +135,7 @@ local function pulseGlow(uiStroke)
         local up = true
         while uiStroke and uiStroke.Parent do
             for i = 1, 20 do
-                if not (uiStroke and uiStroke.Parent) then break end
+                if not uiStroke.Parent then break end
                 uiStroke.Transparency = up and (1 - i/30) or (i/30)
                 task.wait(0.03)
             end
@@ -148,7 +146,7 @@ local function pulseGlow(uiStroke)
 end
 
 local function farmDiamonds()
-    repeat task.wait(0.1) until LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    repeat task.wait() until LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if LocalPlayer:GetAttribute("HasDied") == true then hopServer() return end
     local chest
     local findStart = tick()
@@ -159,7 +157,7 @@ local function farmDiamonds()
         task.wait(0.2)
     end
     if not chest then
-        notify("Notification", "Chest not found (timeout)", 3)
+        notify("Notification", "chest not found (timeout)", 3)
         hopServer()
         return
     end
@@ -193,7 +191,7 @@ local function farmDiamonds()
     local waitStart = tick()
     while tick() - waitStart < 8 do
         if LocalPlayer:GetAttribute("HasDied") == true then hopServer() return end
-        if workspace:FindFirstChildWhichIsA("Model") and workspace:FindFirstChild("Diamond") then
+        if workspace:FindFirstChild("Diamond", true) then
             diamondFound = true
             break
         end
@@ -207,7 +205,7 @@ local function farmDiamonds()
     task.wait(0.5)
     if LocalPlayer:GetAttribute("HasDied") == true then hopServer() return end
     for _, v in pairs(workspace:GetDescendants()) do
-        if v:IsA("Model") and v.Name == "Diamond" then
+        if v.ClassName == "Model" and v.Name == "Diamond" then
             pcall(function() Remote:FireServer(v) end)
         end
     end
@@ -222,9 +220,6 @@ local function farmDiamonds()
 end
 
 task.spawn(farmDiamonds)
-
-local existingGui = CoreGui:FindFirstChild("Yo my dih was made with diamond (vuk)")
-if existingGui then existingGui:Destroy() end
 
 local a = Instance.new("ScreenGui")
 a.Name = "Yo my dih was made with diamond (vuk)"
@@ -284,11 +279,10 @@ diamondLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 diamondLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 task.spawn(function()
-    while diamondLabel and diamondLabel.Parent do
+    while task.wait(0.2) do
         pcall(function()
             diamondLabel.Text = "💎 Diamonds: " .. (DiamondCount and DiamondCount.Text or "0")
         end)
-        task.wait(0.2)
     end
 end)
 
@@ -312,14 +306,13 @@ pulseGlow(copyStroke)
 copyBtn.MouseButton1Click:Connect(function()
     local ok = pcall(function() setclipboard(DISCORD_LINK) end)
     if not ok then
-        notify("Clipboard", "Failed to copy", 3)
+        pcall(function() CoreGui:SetCore("SendNotification", {Title = "Clipboard", Text = "Failed to copy", Duration = 3}) end)
         return
     end
     copyBtn.Text = "Copied!"
-    task.delay(1.2, function()
-        if copyBtn then
-            copyBtn.Text = "Discord • Copy Invite"
-        end
+    task.spawn(function()
+        task.wait(1.2)
+        copyBtn.Text = "Discord • Copy Invite"
     end)
 end)
 
