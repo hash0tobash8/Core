@@ -210,17 +210,7 @@ else
     G2L["LiquidGradient"]["Rotation"] = 15
     G2L["LiquidGradient"]["Offset"] = Vector2.new(-2, 0)
     
-    G2L["Counter"] = Instance.new("TextLabel", G2L["2"])
-    G2L["Counter"]["Name"] = "Counter"
-    G2L["Counter"]["Size"] = UDim2.new(1, 0, 0, 30)
-    G2L["Counter"]["Position"] = UDim2.fromScale(0.5, 0.65)
-    G2L["Counter"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
-    G2L["Counter"]["BackgroundTransparency"] = 1
-    G2L["Counter"]["FontFace"] = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Bold)
-    G2L["Counter"]["Text"] = "Collected: 0"
-    G2L["Counter"]["TextColor3"] = Color3.fromRGB(255, 255, 255)
-    G2L["Counter"]["TextSize"] = 20
-    G2L["Counter"]["TextWrapped"] = true
+    
     
     G2L["Footer"] = Instance.new("TextLabel", G2L["2"])
     G2L["Footer"]["Name"] = "Footer"
@@ -381,14 +371,7 @@ else
         return diamondsCollected
     end
     
-    task.spawn(function()
-        while G2L["1"] and G2L["1"].Parent do
-            wait(1)
-            if G2L["Counter"] then
-                G2L["Counter"].Text = "Collected: " .. (tonumber(DiamondCount.Text) - StartCountDiamon)
-            end
-        end
-    end)
+    
     
     local totalPasses = 5
     for pass = 1, totalPasses do
