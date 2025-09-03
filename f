@@ -5,7 +5,7 @@ if getgenv().RunScript == true then return end
 getgenv().RunScript = true
 
 local queueScript = string.format([[
-loadstring(game:HttpGet('https://raw.githubusercontent.com/hash0tobash8/Core/refs/heads/main/DiamondFarm.lua'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/hash0tobash8/Core/refs/heads/main/f'))()
 ]])
 
 queue_on_teleport(queueScript)
