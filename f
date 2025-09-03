@@ -40,8 +40,10 @@ task.spawn(function()
             local Dis = (LastPosition - HMNRT.Position).Magnitude
             if Dis < 5 then
                 Stuck_Count = Stuck_Count + 1
+            else
+                Stuck_Count = 0
             end
-            if OutTick >= 35 or Stuck_Count > 2 then
+            if OutTick >= 35 or Stuck_Count >= 3 then
                 player:Kick()
                 wait(0.5)
                 game:GetService("TeleportService"):Teleport(126509999114328)
@@ -61,7 +63,7 @@ local function matchesAllowedKeyword(value, allowedKeywords)
     return false
 end
 
-if tonumber(game.PlaceId) == tonumber(79546208627805) then
+if tonumber(game.PlaceId) == tonumber(126509999114328) then
     local UIS = game:GetService("UserInputService")
     local player = game.Players.LocalPlayer
     local character = player.Character
@@ -210,22 +212,10 @@ else
     G2L["LiquidGradient"]["Rotation"] = 15
     G2L["LiquidGradient"]["Offset"] = Vector2.new(-2, 0)
     
-    G2L["Counter"] = Instance.new("TextLabel", G2L["2"])
-    G2L["Counter"]["Name"] = "Counter"
-    G2L["Counter"]["Size"] = UDim2.new(1, 0, 0, 30)
-    G2L["Counter"]["Position"] = UDim2.fromScale(0.5, 0.65)
-    G2L["Counter"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
-    G2L["Counter"]["BackgroundTransparency"] = 1
-    G2L["Counter"]["FontFace"] = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Bold)
-    G2L["Counter"]["Text"] = "Collected: 0"
-    G2L["Counter"]["TextColor3"] = Color3.fromRGB(255, 255, 255)
-    G2L["Counter"]["TextSize"] = 20
-    G2L["Counter"]["TextWrapped"] = true
-    
     G2L["Footer"] = Instance.new("TextLabel", G2L["2"])
     G2L["Footer"]["Name"] = "Footer"
     G2L["Footer"]["Size"] = UDim2.new(1, 0, 0, 20)
-    G2L["Footer"]["Position"] = UDim2.fromScale(0.5, 0.8)
+    G2L["Footer"]["Position"] = UDim2.fromScale(0.5, 0.7)
     G2L["Footer"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
     G2L["Footer"]["BackgroundTransparency"] = 1
     G2L["Footer"]["FontFace"] = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Bold)
@@ -237,7 +227,7 @@ else
     G2L["3"] = Instance.new("TextButton", G2L["2"])
     G2L["3"]["Name"] = "CloseButton"
     G2L["3"]["Size"] = UDim2.new(0, 140, 0, 28)
-    G2L["3"]["Position"] = UDim2.fromScale(0.5, 0.95)
+    G2L["3"]["Position"] = UDim2.fromScale(0.5, 0.9)
     G2L["3"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
     G2L["3"]["BackgroundColor3"] = Color3.fromRGB(27, 28, 33)
     G2L["3"]["BorderSizePixel"] = 0
@@ -318,7 +308,6 @@ else
     local RequestTakeDiamonds = RemoteEvents:FindFirstChild("RequestTakeDiamonds")
     local FastBring_Delay = 0.17
     local Bring_HipHeight = 6
-    local StartCountDiamon = tonumber(DiamondCount.Text)
     local Items = workspace:WaitForChild("Items")
     
     if workspace:FindFirstChild("Map"):FindFirstChild("Boundaries") then
@@ -381,23 +370,9 @@ else
         return diamondsCollected
     end
     
-    task.spawn(function()
-        while G2L["1"] and G2L["1"].Parent do
-            wait(1)
-            if G2L["Counter"] then
-                G2L["Counter"].Text = "Collected: " .. (tonumber(DiamondCount.Text) - StartCountDiamon)
-            end
-        end
-    end)
-    
-    local totalPasses = 5
-    for pass = 1, totalPasses do
-        local chests = collectAllChests()
-        wait(1)
-        local diamonds = collectAllDiamonds()
-        wait(1)
-    end
-    
+    collectAllChests()
+    wait(1)
+    collectAllDiamonds()
     wait(2)
     player:Kick("wait unc teleporting to another server")
     wait(0.5)
