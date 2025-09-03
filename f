@@ -139,6 +139,176 @@ if tonumber(game.PlaceId) == tonumber(79546208627805) then
         wait(0.1)
     until Teleport == true
 else
+    local G2L = {}
+
+    local UserInputService = game:GetService("UserInputService")
+    local TweenService = game:GetService("TweenService")
+    
+    G2L["1"] = Instance.new("ScreenGui", game:GetService("CoreGui"))
+    G2L["1"]["Name"] = "StatusPopup"
+    G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling
+    
+    local FRAME_SIZE = Vector2.new(240, 215)
+    local SHADOW_OFFSET = Vector2.new(20, 20)
+    local SHADOW_SIZE = FRAME_SIZE + SHADOW_OFFSET
+    local CENTER_POSITION = UDim2.new(0.5, 0, 0.5, 0)
+    local DISCORD_BLURPLE = Color3.fromRGB(88, 101, 242)
+    
+    G2L["s"] = Instance.new("ImageLabel", G2L["1"])
+    G2L["s"]["Name"] = "Shadow"
+    G2L["s"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
+    G2L["s"]["Position"] = CENTER_POSITION
+    G2L["s"]["Size"] = UDim2.fromOffset(SHADOW_SIZE.X, SHADOW_SIZE.Y)
+    G2L["s"]["BackgroundTransparency"] = 1.0
+    G2L["s"]["ZIndex"] = 0
+    G2L["s"]["Image"] = "rbxassetid://17290899982"
+    
+    G2L["2"] = Instance.new("Frame", G2L["1"])
+    G2L["2"]["Name"] = "MainFrame"
+    G2L["2"]["Active"] = true
+    G2L["2"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
+    G2L["2"]["Position"] = CENTER_POSITION
+    G2L["2"]["Size"] = UDim2.fromOffset(FRAME_SIZE.X, FRAME_SIZE.Y)
+    G2L["2"]["BackgroundColor3"] = Color3.fromRGB(19, 20, 24)
+    G2L["2"]["BorderSizePixel"] = 0
+    G2L["2"]["ClipsDescendants"] = true
+    G2L["2"]["ZIndex"] = 1
+    
+    G2L["7"] = Instance.new("UICorner", G2L["2"])
+    G2L["7"]["CornerRadius"] = UDim.new(0, 20)
+    
+    G2L["Title"] = Instance.new("TextLabel", G2L["2"])
+    G2L["Title"]["Name"] = "Title"
+    G2L["Title"]["Size"] = UDim2.new(1, 0, 0, 50)
+    G2L["Title"]["Position"] = UDim2.fromScale(0.5, 0.3)
+    G2L["Title"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
+    G2L["Title"]["BackgroundTransparency"] = 1
+    G2L["Title"]["FontFace"] = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Bold)
+    G2L["Title"]["Text"] = "Diamonds Farm"
+    G2L["Title"]["TextColor3"] = Color3.fromRGB(255, 255, 255)
+    G2L["Title"]["TextSize"] = 33
+    G2L["Title"]["TextWrapped"] = true
+    
+    G2L["Running"] = Instance.new("TextLabel", G2L["2"])
+    G2L["Running"]["Name"] = "Running"
+    G2L["Running"]["Size"] = UDim2.new(1, 0, 0, 40)
+    G2L["Running"]["Position"] = UDim2.fromScale(0.5, 0.5)
+    G2L["Running"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
+    G2L["Running"]["BackgroundTransparency"] = 1
+    G2L["Running"]["FontFace"] = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.ExtraBold)
+    G2L["Running"]["Text"] = "Running"
+    G2L["Running"]["TextColor3"] = Color3.fromRGB(255, 255, 255)
+    G2L["Running"]["TextSize"] = 30
+    G2L["Running"]["TextWrapped"] = true
+    G2L["Running"]["ClipsDescendants"] = true
+    G2L["LiquidGradient"] = Instance.new("UIGradient", G2L["Running"])
+    G2L["LiquidGradient"]["Color"] = ColorSequence.new({
+    	ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)),
+    	ColorSequenceKeypoint.new(0.50, DISCORD_BLURPLE),
+    	ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255)),
+    })
+    G2L["LiquidGradient"]["Rotation"] = 15
+    G2L["LiquidGradient"]["Offset"] = Vector2.new(-2, 0)
+    
+    G2L["Counter"] = Instance.new("TextLabel", G2L["2"])
+    G2L["Counter"]["Name"] = "Counter"
+    G2L["Counter"]["Size"] = UDim2.new(1, 0, 0, 30)
+    G2L["Counter"]["Position"] = UDim2.fromScale(0.5, 0.65)
+    G2L["Counter"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
+    G2L["Counter"]["BackgroundTransparency"] = 1
+    G2L["Counter"]["FontFace"] = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Bold)
+    G2L["Counter"]["Text"] = "Collected: 0"
+    G2L["Counter"]["TextColor3"] = Color3.fromRGB(255, 255, 255)
+    G2L["Counter"]["TextSize"] = 20
+    G2L["Counter"]["TextWrapped"] = true
+    
+    G2L["Footer"] = Instance.new("TextLabel", G2L["2"])
+    G2L["Footer"]["Name"] = "Footer"
+    G2L["Footer"]["Size"] = UDim2.new(1, 0, 0, 20)
+    G2L["Footer"]["Position"] = UDim2.fromScale(0.5, 0.8)
+    G2L["Footer"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
+    G2L["Footer"]["BackgroundTransparency"] = 1
+    G2L["Footer"]["FontFace"] = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.Bold)
+    G2L["Footer"]["Text"] = "-MOONDIETY-"
+    G2L["Footer"]["TextColor3"] = Color3.fromRGB(255, 255, 255)
+    G2L["Footer"]["TextSize"] = 14
+    G2L["Footer"]["TextWrapped"] = true
+    
+    G2L["3"] = Instance.new("TextButton", G2L["2"])
+    G2L["3"]["Name"] = "CloseButton"
+    G2L["3"]["Size"] = UDim2.new(0, 140, 0, 28)
+    G2L["3"]["Position"] = UDim2.fromScale(0.5, 0.95)
+    G2L["3"]["AnchorPoint"] = Vector2.new(0.5, 0.5)
+    G2L["3"]["BackgroundColor3"] = Color3.fromRGB(27, 28, 33)
+    G2L["3"]["BorderSizePixel"] = 0
+    G2L["3"]["FontFace"] = Font.new("rbxasset://fonts/families/Montserrat.json", Enum.FontWeight.SemiBold)
+    G2L["3"]["Text"] = "Close"
+    G2L["3"]["TextColor3"] = Color3.fromRGB(255, 255, 255)
+    G2L["3"]["TextSize"] = 18
+    G2L["3"]["AutoButtonColor"] = false
+    G2L["d"] = Instance.new("UICorner", G2L["3"])
+    G2L["d"]["CornerRadius"] = UDim.new(0, 10)
+    
+    task.spawn(function()
+    	local closeTime = 0.5
+    	local closeTweenInfo = TweenInfo.new(closeTime, Enum.EasingStyle.Circular, Enum.EasingDirection.In)
+    
+    	G2L["3"].MouseButton1Click:Connect(function()
+    		local frameTween = TweenService:Create(G2L["2"], closeTweenInfo, { Size = UDim2.fromOffset(0,0), BackgroundTransparency = 1 })
+    		local shadowTween = TweenService:Create(G2L["s"], closeTweenInfo, { Size = UDim2.fromOffset(0,0), ImageTransparency = 1 })
+    		frameTween:Play()
+    		shadowTween:Play()
+    		frameTween.Completed:Connect(function() G2L["1"]:Destroy() end)
+    	end)
+    end)
+    
+    task.spawn(function()
+    	local popInTime = 0.6
+    	local popInTweenInfo = TweenInfo.new(popInTime, Enum.EasingStyle.Circular, Enum.EasingDirection.Out)
+    	G2L["2"].Size, G2L["s"].Size = UDim2.fromOffset(0,0), UDim2.fromOffset(0,0)
+    	G2L["2"].BackgroundTransparency, G2L["s"].ImageTransparency = 1, 1
+    	G2L["2"].Visible, G2L["s"].Visible = true, true
+    	local frameTween = TweenService:Create(G2L["2"], popInTweenInfo, { Size = UDim2.fromOffset(FRAME_SIZE.X, FRAME_SIZE.Y), BackgroundTransparency = 0 })
+    	local shadowTween = TweenService:Create(G2L["s"], popInTweenInfo, { Size = UDim2.fromOffset(SHADOW_SIZE.X, SHADOW_SIZE.Y), ImageTransparency = 0 })
+    	frameTween:Play()
+    	shadowTween:Play()
+    end)
+    
+    task.spawn(function()
+    	local isDragging = false
+    	local dragStart, frameStart
+    	local mainFrame, shadow = G2L["2"], G2L["s"]
+    	
+    	mainFrame.InputBegan:Connect(function(input)
+    		
+    		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+    			isDragging, dragStart, frameStart = true, input.Position, mainFrame.Position
+    		end
+    	end)
+    	
+    	UserInputService.InputChanged:Connect(function(input)
+    		
+    		if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and isDragging then
+    			local delta = input.Position - dragStart
+    			mainFrame.Position = UDim2.new(frameStart.X.Scale, frameStart.X.Offset + delta.X, frameStart.Y.Scale, frameStart.Y.Offset + delta.Y)
+    			shadow.Position = mainFrame.Position
+    		end
+    	end)
+    	
+    	UserInputService.InputEnded:Connect(function(input)
+    		
+    		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+    			isDragging = false
+    		end
+    	end)
+    end)
+    
+    task.spawn(function()
+    	local gradient = G2L["LiquidGradient"]
+    	local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true)
+    	TweenService:Create(gradient, tweenInfo, { Offset = Vector2.new(2, 0) }):Play()
+    end)
+
     local DiamondCount = plrGui:WaitForChild("Interface"):WaitForChild("DiamondCount"):FindFirstChild("Count")
     local Map = workspace:WaitForChild("Map")
     local InnerTouchZone = Map:WaitForChild("Campground"):WaitForChild("MainFire"):WaitForChild("InnerTouchZone")
@@ -211,6 +381,15 @@ else
         return diamondsCollected
     end
     
+    task.spawn(function()
+        while G2L["1"] and G2L["1"].Parent do
+            wait(1)
+            if G2L["Counter"] then
+                G2L["Counter"].Text = "Collected: " .. (tonumber(DiamondCount.Text) - StartCountDiamon)
+            end
+        end
+    end)
+    
     local totalPasses = 5
     for pass = 1, totalPasses do
         local chests = collectAllChests()
@@ -220,7 +399,7 @@ else
     end
     
     wait(2)
-    player:Kick()
+    player:Kick("wait unc teleporting to another server")
     wait(0.5)
     game:GetService("TeleportService"):Teleport(126509999114328)
 end
