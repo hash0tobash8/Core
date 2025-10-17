@@ -19,44 +19,7 @@ repeat
     if TimeWaitLoadGame > 3 then
         player:Kick()
         wait(0.5)
-       local placeId = game.PlaceId
-local currentJobId = game.JobId
-local HttpService = game:GetService("HttpService")
-local TeleportService = game:GetService("TeleportService")
-
-local function joinAnyServer()
-    local servers = {}
-    local success, result = pcall(function()
-        return HttpService:JSONDecode(HttpService:GetAsync(
-            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
-        ))
-    end)
-    
-    if success and result and result.data then
-        -- Collect ALL servers except the current one
-        for _, server in ipairs(result.data) do
-            if server.id ~= currentJobId and server.playing < server.maxPlayers then
-                table.insert(servers, server)
-            end
-        end
- 
-        if #servers > 0 then
-            local randomServer = servers[math.random(1, #servers)]
-            player:Kick("Teleporting to server: " .. randomServer.id)
-            wait(0.5)
-            TeleportService:TeleportToPlaceInstance(placeId, randomServer.id)
-            return true
-        end
-    end
-    
-  
-    player:Kick("No servers found, attempting random teleport")
-    wait(0.5)
-    TeleportService:Teleport(placeId)
-    return false
-end
-
-pcall(joinAnyServer)
+        game:GetService("TeleportService"):Teleport(126509999114328)
     end
 until game.Players and game.Players.LocalPlayer and game.Players.LocalPlayer.Character
 
@@ -81,44 +44,7 @@ task.spawn(function()
             if OutTick >= 35 or Stuck_Count > 2 then
                 player:Kick()
                 wait(0.5)
-               local placeId = game.PlaceId
-local currentJobId = game.JobId
-local HttpService = game:GetService("HttpService")
-local TeleportService = game:GetService("TeleportService")
-
-local function joinAnyServer()
-    local servers = {}
-    local success, result = pcall(function()
-        return HttpService:JSONDecode(HttpService:GetAsync(
-            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
-        ))
-    end)
-    
-    if success and result and result.data then
-        -- Collect ALL servers except the current one
-        for _, server in ipairs(result.data) do
-            if server.id ~= currentJobId and server.playing < server.maxPlayers then
-                table.insert(servers, server)
-            end
-        end
- 
-        if #servers > 0 then
-            local randomServer = servers[math.random(1, #servers)]
-            player:Kick("Teleporting to server: " .. randomServer.id)
-            wait(0.5)
-            TeleportService:TeleportToPlaceInstance(placeId, randomServer.id)
-            return true
-        end
-    end
-    
-  
-    player:Kick("No servers found, attempting random teleport")
-    wait(0.5)
-    TeleportService:Teleport(placeId)
-    return false
-end
-
-pcall(joinAnyServer)
+                game:GetService("TeleportService"):Teleport(126509999114328)
             end
             LastPosition = HMNRT.Position
         end
@@ -389,25 +315,7 @@ else
         workspace:FindFirstChild("Map"):FindFirstChild("Boundaries"):Destroy()
     end
     
-   local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local hrp = character:WaitForChild("HumanoidRootPart")
-local humanoid = character:WaitForChild("Humanoid")
-
-
-humanoid.PlatformStand = true
-humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, false)
-
-
-for _, part in ipairs(character:GetDescendants()) do
-    if part:IsA("BasePart") then
-        part.CanCollide = false
-        part.Anchored = false
-    end
-end
-
-
-workspace.Gravity = 0
+    game.Workspace.Gravity = 0
     
     local function collectAllChests()
         local chestsCollected = 0
@@ -474,46 +382,39 @@ workspace.Gravity = 0
     end
     
     wait(2)
-
-wait(2)
-
+   -- Replace the kick and teleport lines with this:
 local placeId = game.PlaceId
 local currentJobId = game.JobId
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
 
-local function joinAnyServer()
+local function joinLowerServer()
     local servers = {}
     local success, result = pcall(function()
         return HttpService:JSONDecode(HttpService:GetAsync(
             "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
         ))
     end)
-    
-    if success and result and result.data then
-        -- Collect ALL servers except the current one
+    if (success and result and result.data) then
         for _, server in ipairs(result.data) do
-            if server.id ~= currentJobId and server.playing < server.maxPlayers then
+            if ((server.id ~= currentJobId) and (server.playing < (server.maxPlayers or 30))) then
                 table.insert(servers, server)
             end
         end
- 
-        if #servers > 0 then
-            local randomServer = servers[math.random(1, #servers)]
-            player:Kick("Teleporting to server: " .. randomServer.id)
-            wait(0.5)
-            TeleportService:TeleportToPlaceInstance(placeId, randomServer.id)
-            return true
+        table.sort(servers, function(a, b)
+            return a.playing < b.playing
+        end)
+        if (#servers > 0) then
+            TeleportService:TeleportToPlaceInstance(placeId, servers[1].id)
+        else
+            TeleportService:Teleport(placeId)
         end
+    else
+        TeleportService:Teleport(placeId)
     end
-    
-  
-    player:Kick("No servers found, attempting random teleport")
-    wait(0.5)
-    TeleportService:Teleport(placeId)
-    return false
 end
 
-pcall(joinAnyServer)
+player:Kick("wait unc teleporting to another server")
+wait(0.5)
+pcall(joinLowerServer)
 end
-
