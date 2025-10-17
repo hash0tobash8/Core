@@ -400,37 +400,46 @@ workspace.Gravity = 0
     end
     
     wait(2)
- 
-local placeId = 79546208627805
+
+wait(2)
+
+local placeId = game.PlaceId
 local currentJobId = game.JobId
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
 
-local success, result = pcall(function()
-    return HttpService:JSONDecode(HttpService:GetAsync(
-        "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
-    ))
-end)
-
-if success and result and result.data then
+local function joinAnyServer()
     local servers = {}
-    for _, server in ipairs(result.data) do
-        if server.id ~= currentJobId and (server.playing < (server.maxPlayers or 30)) then
-            table.insert(servers, server)
+    local success, result = pcall(function()
+        return HttpService:JSONDecode(HttpService:GetAsync(
+            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
+        ))
+    end)
+    
+    if success and result and result.data then
+        -- Collect ALL servers except the current one
+        for _, server in ipairs(result.data) do
+            if server.id ~= currentJobId and server.playing < server.maxPlayers then
+                table.insert(servers, server)
+            end
+        end
+ 
+        if #servers > 0 then
+            local randomServer = servers[math.random(1, #servers)]
+            player:Kick("Teleporting to server: " .. randomServer.id)
+            wait(0.5)
+            TeleportService:TeleportToPlaceInstance(placeId, randomServer.id)
+            return true
         end
     end
-    table.sort(servers, function(a, b) return a.playing < b.playing end)
-    if #servers > 0 then
-        player:Kick("Switching to lower-population server...")
-        wait(0.5)
-        TeleportService:TeleportToPlaceInstance(placeId, servers[1].id)
-        return
-    end
+    
+  
+    player:Kick("No servers found, attempting random teleport")
+    wait(0.5)
+    TeleportService:Teleport(placeId)
+    return false
 end
 
-
-player:Kick("Rejoining game...")
-wait(0.5)
-TeleportService:Teleport(placeId)
+pcall(joinAnyServer)
 end
 
