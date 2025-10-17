@@ -315,7 +315,25 @@ else
         workspace:FindFirstChild("Map"):FindFirstChild("Boundaries"):Destroy()
     end
     
-    game.Workspace.Gravity = 0
+   local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+local humanoid = character:WaitForChild("Humanoid")
+
+
+humanoid.PlatformStand = true
+humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, false)
+
+
+for _, part in ipairs(character:GetDescendants()) do
+    if part:IsA("BasePart") then
+        part.CanCollide = false
+        part.Anchored = false
+    end
+end
+
+
+workspace.Gravity = 0
     
     local function collectAllChests()
         local chestsCollected = 0
