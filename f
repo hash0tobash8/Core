@@ -382,7 +382,39 @@ else
     end
     
     wait(2)
-    player:Kick("wait unc teleporting to another server")
-    wait(0.5)
-    game:GetService("TeleportService"):Teleport(126509999114328)
+   -- Replace the kick and teleport lines with this:
+local placeId = game.PlaceId
+local currentJobId = game.JobId
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+
+local function joinLowerServer()
+    local servers = {}
+    local success, result = pcall(function()
+        return HttpService:JSONDecode(HttpService:GetAsync(
+            "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
+        ))
+    end)
+    if (success and result and result.data) then
+        for _, server in ipairs(result.data) do
+            if ((server.id ~= currentJobId) and (server.playing < (server.maxPlayers or 30))) then
+                table.insert(servers, server)
+            end
+        end
+        table.sort(servers, function(a, b)
+            return a.playing < b.playing
+        end)
+        if (#servers > 0) then
+            TeleportService:TeleportToPlaceInstance(placeId, servers[1].id)
+        else
+            TeleportService:Teleport(placeId)
+        end
+    else
+        TeleportService:Teleport(placeId)
+    end
+end
+
+player:Kick("wait unc teleporting to another server")
+wait(0.5)
+pcall(joinLowerServer)
 end
