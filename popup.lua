@@ -207,7 +207,7 @@ task.spawn(function()
 		isAnimationActive = false
 		
 		
-		if setclipboard then setclipboard("https://discord.gg/moondiety") end
+		if setclipboard then setclipboard("https://moondiety.com/discord") end
 		
 		
 		local tweenInfoFadeOut = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
